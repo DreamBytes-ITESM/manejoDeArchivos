@@ -1,0 +1,3 @@
+Nombre	| Matricula
+luis	| 1
+rod	| 2
