@@ -22,22 +22,22 @@ public class ListaDeAlumnos {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int a=0;
-        String fn="";
-        a = pedirDatos(a);
-        String[][] arreglo = new String[a][2];
-        arreglo = llenarArreglo(arreglo);
-        fn = pedirDatos(fn);
-        crearArchivo(fn,arreglo);
-        leerArchivo(fn);   
+        int a=0;//numero de alumnos
+        String fn="";//nombre del archivo
+        a = pedirDatos(a); //pide el tamaño del arreglo/numero de alumnos
+        String[][] arreglo = new String[a][2];//crea el arreglo
+        arreglo = llenarArreglo(arreglo);//llena el arreglo
+        fn = pedirDatos(fn); //pide el nombre del archivo
+        crearArchivo(fn,arreglo); //crea el archivo y lo llena con el arreglo
+        leerArchivo(fn);   //muestra el arreglo al usuario
     }
-    public static int pedirDatos(int num){
+    public static int pedirDatos(int num){//recibe un int y regresa un int
         Scanner entrada = new Scanner(System.in);
         System.out.print("Ingrese el numero de alumnos: ");
         num=entrada.nextInt();
         return num;
     }
-    public static String pedirDatos(String archivo){
+    public static String pedirDatos(String archivo){//recibe un String y regresa un String
         Scanner entrada = new Scanner(System.in);
         System.out.print("Ingrese el nombre del archivo donde desea guardar: ");
         archivo=entrada.nextLine();
@@ -47,32 +47,32 @@ public class ListaDeAlumnos {
         String n,m;
         Scanner entrada = new Scanner(System.in);
         for(int i=0;i<a.length;i++){
-            for(int j=0;j<a[0].length;j++){
-                if(j==0){
+            for(int j=0;j<a[0].length;j++){//pide los datos
+                if(j==0){//pide el nombre del alumno
                     System.out.print("Ingrese el nombre del alumno: ");
                     n = entrada.nextLine();
                     for(int k=0;k<i;k++){
-                        while(a[k][0].contains(n)){
+                        while(a[k][0].contains(n)){//comprueba si ya existe en la lista
                             System.out.print("Ya ingreso este nombre, ingrese uno diferente: ");
                             n = entrada.nextLine();
                         }
                     }
-                a[i][j]=n;
+                a[i][j]=n;//pasa el valor al arreglo
                 }
-                if(j==1){
+                if(j==1){//pide la matricula
                     System.out.print("Ingrese la matricula del alumno: ");
                     m = entrada.nextLine();
                     for(int k=0;k<i;k++){
-                        while(a[k][1].contains(m)){
+                        while(a[k][1].contains(m)){//comprueba si ya existe en la lista
                             System.out.print("Ya ingreso esta matricula, ingrese una diferente: ");
                             m = entrada.nextLine();
                         }
                     }
-                a[i][j]=m;
+                a[i][j]=m;//pasa el valor al arreglo
                 }
             }
         }
-        return a;
+        return a;//regresa el arreglo
     }
     public static void crearArchivo(String name,String[][] arr){
         //Paso 1 Instanciamos un objeto de la clase File 
@@ -105,7 +105,7 @@ public class ListaDeAlumnos {
             for(int i=0;i<arr.length;i++){
                 for(int j=0;j<arr[0].length;j++){
                 escribir.print(arr[i][j]);
-                if(j==0)escribir.print("\t| ");
+                if(j==0)escribir.print("\t| ");//si es el primero en la linea lista agrega una separacion en el texto
                 }
                 escribir.println();
             }
