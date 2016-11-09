@@ -22,14 +22,38 @@ public class ListaDeAlumnos {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        menu();
+    }
+    public static void menu(){
+        int resp;
         int a=0;//numero de alumnos
         String fn="";//nombre del archivo
-        a = pedirDatos(a); //pide el tamaño del arreglo/numero de alumnos
-        String[][] arreglo = new String[a][2];//crea el arreglo
-        arreglo = llenarArreglo(arreglo);//llena el arreglo
-        fn = pedirDatos(fn); //pide el nombre del archivo
-        crearArchivo(fn,arreglo); //crea el archivo y lo llena con el arreglo
-        leerArchivo(fn);   //muestra el arreglo al usuario
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Que desea hacer?");
+        System.out.println("1. Crear una lista de alumnos");
+        System.out.println("2. Mostrar una lista de alumnos");        
+        resp = entrada.nextInt();
+        while(resp<1 || resp>2){
+            System.out.print("Valor Incorrecto, Intente de nuevo: ");
+            resp = entrada.nextInt();}
+        switch(resp){
+            case 1:
+                a = pedirDatos(a); //pide el tamaño del arreglo/numero de alumnos
+                String[][] arreglo = new String[a][2];//crea el arreglo
+                arreglo = llenarArreglo(arreglo);//llena el arreglo
+                fn = pedirDatos(fn); //pide el nombre del archivo
+                crearArchivo(fn,arreglo); //crea el archivo y lo llena con el arreglo
+                cont();
+                break;
+            case 2:
+                fn = pedirDatos(fn); //pide el nombre del archivo
+                leerArchivo(fn);   //muestra el arreglo al usuario
+                cont();
+                break;
+            default:
+                mensajeSalida();
+                break;
+        }
     }
     public static int pedirDatos(int num){//recibe un int y regresa un int
         Scanner entrada = new Scanner(System.in);
@@ -39,7 +63,7 @@ public class ListaDeAlumnos {
     }
     public static String pedirDatos(String archivo){//recibe un String y regresa un String
         Scanner entrada = new Scanner(System.in);
-        System.out.print("Ingrese el nombre del archivo donde desea guardar: ");
+        System.out.print("Ingrese el nombre del archivo: ");
         archivo=entrada.nextLine();
         return archivo;
     }
@@ -138,5 +162,28 @@ public class ListaDeAlumnos {
         } catch (Exception e) {
             e.printStackTrace();
         }  
+    }
+    public static void mensajeSalida(){
+        System.out.println("Gracias por usar el programa"); //despedida
+        System.exit(0);
+    }
+    public static void cont(){
+        int resp;
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Desea continuar?");
+        System.out.println("1. Si");
+        System.out.println("0. No");        
+        resp = entrada.nextInt();
+        if (resp<0 || resp>1){
+            cont();} else {
+            switch(resp){
+                case 1:
+                    main(null);
+                    break;
+                default:
+                    mensajeSalida();
+                    break;
+            }
+        }
     }
 }
