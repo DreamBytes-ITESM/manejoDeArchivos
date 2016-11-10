@@ -184,8 +184,10 @@ public class ListaDeAlumnos {
         System.out.println("1. Si");
         System.out.println("0. No");        
         resp = entrada.nextInt();
-        if (resp<0 || resp>1){
-            cont();} else {
+        while (resp<0 || resp>1){
+            System.out.print("Valor Incorrecto, Intente de nuevo: ");
+            resp = entrada.nextInt();
+        }
             switch(resp){
                 case 1:
                     main(null);
@@ -196,4 +198,3 @@ public class ListaDeAlumnos {
             }
         }
     }
-}
