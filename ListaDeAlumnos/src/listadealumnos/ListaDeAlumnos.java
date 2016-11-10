@@ -25,17 +25,23 @@ public class ListaDeAlumnos {
         menu();
     }
     public static void menu(){
-        int resp;
+        int resp=0;
         int a=0;//numero de alumnos
         String fn="";//nombre del archivo
         Scanner entrada = new Scanner(System.in);
         System.out.println("Que desea hacer?");
         System.out.println("1. Crear una lista de alumnos");
-        System.out.println("2. Mostrar una lista de alumnos");        
-        resp = entrada.nextInt();
-        while(resp<1 || resp>2){
+        System.out.println("2. Mostrar una lista de alumnos");   
+        System.out.println("3. Salir");
+        try {
+            resp = entrada.nextInt();
+        while(resp<1 || resp>3){
             System.out.print("Valor Incorrecto, Intente de nuevo: ");
             resp = entrada.nextInt();}
+        } catch(Exception e){
+            System.out.println("Debe ingresar un numero entre 1 y 3.");
+            menu();
+        }
         switch(resp){
             case 1:
                 a = pedirDatos(a); //pide el tamaño del arreglo/numero de alumnos
@@ -49,6 +55,9 @@ public class ListaDeAlumnos {
                 fn = pedirDatos(fn); //pide el nombre del archivo
                 leerArchivo(fn);   //muestra el arreglo al usuario
                 cont();
+                break;
+            case 3:
+                mensajeSalida();
                 break;
             default:
                 mensajeSalida();
@@ -160,7 +169,8 @@ public class ListaDeAlumnos {
            bufferL.close();
            lectura.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("No existe un archivo con ese nombre.");
+            menu();
         }  
     }
     public static void mensajeSalida(){
