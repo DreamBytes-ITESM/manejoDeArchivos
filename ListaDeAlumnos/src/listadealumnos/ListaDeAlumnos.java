@@ -25,35 +25,36 @@ public class ListaDeAlumnos {
         menu();
     }
     public static void menu(){
-        int resp=0;
-        int a=0;//numero de alumnos
-        String fn="";//nombre del archivo
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Que desea hacer?");
+        int resp=0; //Respuesta del usuario
+        int a=0;//Numero de alumnos
+        String fn="";//Nombre del archivo
+        Scanner entrada = new Scanner(System.in);//Pedimos dato por teclado
+        System.out.println("¿Que desea hacer?");
         System.out.println("1. Crear una lista de alumnos");
         System.out.println("2. Mostrar una lista de alumnos");   
         System.out.println("3. Salir");
         try {
             resp = entrada.nextInt();
-        while(resp<1 || resp>3){
-            System.out.print("Valor Incorrecto, Intente de nuevo: ");
-            resp = entrada.nextInt();}
+        while(resp<1 || resp>3){    //Si el valor introducido por el usuario es mayor a 3 o menor a 1 se muestra mensaje de error
+            System.out.println("Valor Incorrecto, debe ingresar un numero entre 1 y 3.");   //y se pide al usuario que introduzca un numero
+            resp = entrada.nextInt();}                                                      //entre 1 y 3.
         } catch(Exception e){
-            System.out.println("Debe ingresar un numero entre 1 y 3.");
             menu();
-        }
+        } 
+            
         switch(resp){
             case 1:
-                a = pedirDatos(a); //pide el tamaño del arreglo/numero de alumnos
-                String[][] arreglo = new String[a][2];//crea el arreglo
-                arreglo = llenarArreglo(arreglo);//llena el arreglo
-                fn = pedirDatos(fn); //pide el nombre del archivo
-                crearArchivo(fn,arreglo); //crea el archivo y lo llena con el arreglo
+                a = pedirDatos(a); //Pide el tamaño del arreglo y numero de alumnos
+                String[][] arreglo = new String[a][2];//Crea el arreglo
+                arreglo = llenarArreglo(arreglo);//Llena el arreglo
+                fn = pedirDatos(fn); //Pide el nombre del archivo
+                crearArchivo(fn,arreglo); //Crea el archivo y lo llena con el arreglo
+                System.out.println("El archivo fue creado exitosamente");
                 cont();
                 break;
             case 2:
-                fn = pedirDatos(fn); //pide el nombre del archivo
-                leerArchivo(fn);   //muestra el arreglo al usuario
+                fn = pedirDatos(fn); //Pide el nombre del archivo
+                leerArchivo(fn);   //Muestra el arreglo al usuario
                 cont();
                 break;
             case 3:
@@ -64,50 +65,50 @@ public class ListaDeAlumnos {
                 break;
         }
     }
-    public static int pedirDatos(int num){//recibe un int y regresa un int
+    public static int pedirDatos(int num){//Pide al usuario el número de alumnos, recibe un int y regresa un int
         Scanner entrada = new Scanner(System.in);
         System.out.print("Ingrese el numero de alumnos: ");
         num=entrada.nextInt();
         return num;
     }
-    public static String pedirDatos(String archivo){//recibe un String y regresa un String
+    public static String pedirDatos(String archivo){//Pide al usuario el nombre del archivo, recibe un String y regresa un String
         Scanner entrada = new Scanner(System.in);
         System.out.print("Ingrese el nombre del archivo: ");
         archivo=entrada.nextLine();
         return archivo;
     }
-    public static String[][] llenarArreglo(String[][] a){
+    public static String[][] llenarArreglo(String[][] a){   //Metodo que llena un arreglo con nombres y matriculas de alumnos
         String n,m;
         Scanner entrada = new Scanner(System.in);
         for(int i=0;i<a.length;i++){
-            for(int j=0;j<a[0].length;j++){//pide los datos
-                if(j==0){//pide el nombre del alumno
+            for(int j=0;j<a[0].length;j++){//Pide los datos
+                if(j==0){//Pide el nombre del alumno
                     System.out.print("Ingrese el nombre del alumno: ");
                     n = entrada.nextLine();
                     for(int k=0;k<i;k++){
-                        while(a[k][0].contains(n)){//comprueba si ya existe en la lista
+                        while(a[k][0].contains(n)){//Comprueba si el nombre ya existe en la lista
                             System.out.print("Ya ingreso este nombre, ingrese uno diferente: ");
                             n = entrada.nextLine();
                         }
                     }
-                a[i][j]=n;//pasa el valor al arreglo
+                a[i][j]=n;//Pasa el valor de la variable n al arreglo
                 }
-                if(j==1){//pide la matricula
+                if(j==1){//Pide la matricula
                     System.out.print("Ingrese la matricula del alumno: ");
                     m = entrada.nextLine();
                     for(int k=0;k<i;k++){
-                        while(a[k][1].contains(m)){//comprueba si ya existe en la lista
+                        while(a[k][1].contains(m)){//Comprueba si la matricula ya existe en la lista
                             System.out.print("Ya ingreso esta matricula, ingrese una diferente: ");
                             m = entrada.nextLine();
                         }
                     }
-                a[i][j]=m;//pasa el valor al arreglo
+                a[i][j]=m;//Pasa el valor de la variable m al arreglo
                 }
             }
         }
-        return a;//regresa el arreglo
+        return a;//Regresa el arreglo
     }
-    public static void crearArchivo(String name,String[][] arr){
+    public static void crearArchivo(String name,String[][] arr){    //Metodo que crea el archivo
         //Paso 1 Instanciamos un objeto de la clase File 
         //al instanciar escribimos como parámetro 
         //el nombre del archivo para manipularlo
@@ -115,14 +116,14 @@ public class ListaDeAlumnos {
         
         //Paso 2. Si no existe el archivo
         if (!archivo.exists())
-        {   try {  //try nos sirve para manejar excepciones. En caso de que algo
-            //pueda salga mal.
+        {   try {  
             //Creamos un archivo nuevo. 
             archivo.createNewFile();
             } catch (IOException ex) {
                ex.printStackTrace();
             }
         } else {   
+            System.out.println("El nombre de archivo introducido ya existe.");
             System.out.println("Por favor introduzca un nombre de archivo diferente.");
             name = pedirDatos(name);
             crearArchivo(name,arr);
@@ -130,7 +131,7 @@ public class ListaDeAlumnos {
         //Paso 3. Escritura en el archivo
         try {
             //Instanciamos un objeto de la clase PrintWriter
-            //como parámetros enviamos el la instancia de File y el formato de
+            //como parámetros enviamos la instancia de File y el formato de
             //archivo de texto
             PrintWriter escribir = new PrintWriter (archivo,"utf-8");
             //Escribimos el contenido del archivo.
@@ -138,7 +139,7 @@ public class ListaDeAlumnos {
             for(int i=0;i<arr.length;i++){
                 for(int j=0;j<arr[0].length;j++){
                 escribir.print(arr[i][j]);
-                if(j==0)escribir.print("\t| ");//si es el primero en la linea lista agrega una separacion en el texto
+                if(j==0)escribir.print("\t| ");//si es el primero en la linea de lista agrega una separacion en el texto
                 }
                 escribir.println();
             }
@@ -148,14 +149,13 @@ public class ListaDeAlumnos {
             e.printStackTrace();
         }
     }
-    public static void leerArchivo(String name){
+    public static void leerArchivo(String name){    //Metodo para leer el archivo
         // Paso 1. Instanciamos un objeto de la clase File y una variable cadena
         File archivo = new File (name+".txt");
         String cadena="";
-        try {//Par el manejo de excepciones
+        try {//Para el manejo de excepciones
             //Instanciamos un objeto de la clase FileReader y otro de la clase
             //BufferedReader, los cuales nos serviran para dar lectura al archivo
-            //deben estar dentro de try.
            FileReader lectura = new FileReader(archivo);
            BufferedReader bufferL = new BufferedReader(lectura);
            //Paso 2. Recorremos el archivo.
@@ -173,11 +173,11 @@ public class ListaDeAlumnos {
             menu();
         }  
     }
-    public static void mensajeSalida(){
-        System.out.println("Gracias por usar el programa"); //despedida
+    public static void mensajeSalida(){     //Metodo que muestra un mensaje de salida en caso de que el usuario
+        System.out.println("Gracias por usar el programa"); //ejecute alguna acción que de por terminado el programa
         System.exit(0);
     }
-    public static void cont(){
+    public static void cont(){      //Metodo que da una salida al programa, si el usuario lo quiere, despues de ejecutar 1 o 2 en el menu principal.
         int resp;
         Scanner entrada = new Scanner(System.in);
         System.out.println("Desea continuar?");
