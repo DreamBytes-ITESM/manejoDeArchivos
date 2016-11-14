@@ -122,11 +122,18 @@ public class ListaDeAlumnos {
             } catch (IOException ex) {
                ex.printStackTrace();
             }
-        } else {   
+        } else {while(archivo.exists()){   
             System.out.println("El nombre de archivo introducido ya existe.");
             System.out.println("Por favor introduzca un nombre de archivo diferente.");
             name = pedirDatos(name);
-            crearArchivo(name,arr);
+            archivo = new File(name+".txt");
+            }
+        try {
+            archivo.createNewFile();
+        }
+        catch(IOException ex){
+            ex.printStackTrace();
+        }
         }
         //Paso 3. Escritura en el archivo
         try {
