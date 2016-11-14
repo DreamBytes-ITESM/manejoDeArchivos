@@ -36,7 +36,7 @@ public class ListaDeAlumnos {
         try {
             resp = entrada.nextInt();
         while(resp<1 || resp>3){    //Si el valor introducido por el usuario es mayor a 3 o menor a 1 se muestra mensaje de error
-            System.out.println("Valor Incorrecto, debe ingresar un numero entre 1 y 3.");   //y se pide al usuario que introduzca un numero
+            System.err.println("Valor Incorrecto, debe ingresar un numero entre 1 y 3.");   //y se pide al usuario que introduzca un numero
             resp = entrada.nextInt();}                                                      //entre 1 y 3.
         } catch(Exception e){
             menu();
@@ -87,7 +87,7 @@ public class ListaDeAlumnos {
                     n = entrada.nextLine();
                     for(int k=0;k<i;k++){
                         while(a[k][0].contains(n)){//Comprueba si el nombre ya existe en la lista
-                            System.out.print("Ya ingreso este nombre, ingrese uno diferente: ");
+                            System.err.print("Ya ingreso este nombre, ingrese uno diferente: ");
                             n = entrada.nextLine();
                         }
                     }
@@ -98,7 +98,7 @@ public class ListaDeAlumnos {
                     m = entrada.nextLine();
                     for(int k=0;k<i;k++){
                         while(a[k][1].contains(m)){//Comprueba si la matricula ya existe en la lista
-                            System.out.print("Ya ingreso esta matricula, ingrese una diferente: ");
+                            System.err.print("Ya ingreso esta matricula, ingrese una diferente: ");
                             m = entrada.nextLine();
                         }
                     }
@@ -123,8 +123,8 @@ public class ListaDeAlumnos {
                ex.printStackTrace();
             }
         } else {while(archivo.exists()){   
-            System.out.println("El nombre de archivo introducido ya existe.");
-            System.out.println("Por favor introduzca un nombre de archivo diferente.");
+            System.err.println("El nombre de archivo introducido ya existe.");
+            System.err.println("Por favor introduzca un nombre de archivo diferente.");
             name = pedirDatos(name);
             archivo = new File(name+".txt");
             }
@@ -176,7 +176,7 @@ public class ListaDeAlumnos {
            bufferL.close();
            lectura.close();
         } catch (Exception e) {
-            System.out.println("No existe un archivo con ese nombre.");
+            System.err.println("No existe un archivo con ese nombre.");
             menu();
         }  
     }
@@ -192,7 +192,7 @@ public class ListaDeAlumnos {
         System.out.println("0. No");        
         resp = entrada.nextInt();
         while (resp<0 || resp>1){
-            System.out.print("Valor Incorrecto, Intente de nuevo: ");
+            System.err.print("Valor Incorrecto, Intente de nuevo: ");
             resp = entrada.nextInt();
         }
             switch(resp){
