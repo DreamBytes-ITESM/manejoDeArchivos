@@ -20,7 +20,7 @@ public class FPRRiveraG1Final {
     public static void main(String[] args) {
         menu();
     }
-     public static void menu(){
+    public static void menu(){
         List<String> optionList = new ArrayList<String>();
         optionList.add("Inventario");
         optionList.add("Venta");
@@ -48,14 +48,16 @@ public class FPRRiveraG1Final {
                 break;
         }
     }
-     public static void llenarInventario(){
+    public static void llenarInventario(){
          ArrayList<Integer> cant = new ArrayList<>();
          ArrayList<String> clave = new ArrayList<>();
          ArrayList<String> desc = new ArrayList<>();
          ArrayList<Float> precio = new ArrayList<>();
+         ArrayList<String> clavant = new ArrayList<>();
+         clavant = leerClaves(clavant);
          //Scanner teclado = new Scanner(System.in);
          boolean a=true;
-         int c=0;
+         int c;
          String s;
          float f;
          final JPanel panel = new JPanel();
@@ -78,6 +80,18 @@ public class FPRRiveraG1Final {
                 try {    
                     s = JOptionPane.showInputDialog("Ingrese la clave del articulo.");
                     //s = teclado.nextLine();
+                    for(int i=0;i<clave.size();i++){
+                        while(clave.get(i).contains(s)){
+                            JOptionPane.showMessageDialog(panel, "Ya a usado esta clave de articulo.", "Error", JOptionPane.ERROR_MESSAGE);
+                            s = JOptionPane.showInputDialog("Ingrese la clave del articulo.");
+                        }
+                    }
+                    for(int i=0;i<clavant.size();i++){
+                        while(clavant.get(i).contains(s)){
+                            JOptionPane.showMessageDialog(panel, "Ya a usado esta clave de articulo.", "Error", JOptionPane.ERROR_MESSAGE);
+                            s = JOptionPane.showInputDialog("Ingrese la clave del articulo.");
+                        }
+                    }
                     clave.add(s);
                     break;
                 } catch (Exception e) {
@@ -117,12 +131,34 @@ public class FPRRiveraG1Final {
             optionList.add("No");
 
             Object[] options = optionList.toArray();
-            int value = JOptionPane.showOptionDialog(null,"Selecciona la opcion que deseas","Menu",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,optionList.get(0));
+            int value = JOptionPane.showOptionDialog(null,"Desea continuar con el programa?","Menu",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,optionList.get(0));
             if(value==1)a=false;
             }
          crearArchivo(cant, clave, desc, precio);
+         registroClaves(clave);
     }
-     public static void crearArchivo(ArrayList<Integer> cantidad,ArrayList<String> clave,ArrayList<String> descripcion,ArrayList<Float> precio){    //Metodo que crea el archivo
+    public static void registroClaves(ArrayList<String> clave){
+        File archivo = new File("claves.txt");
+                if (!archivo.exists())
+                {   try {  
+                    archivo.createNewFile();
+                    } catch (IOException ex) {
+                       ex.printStackTrace();
+                    }
+                }
+                try {
+                    FileWriter fw = new FileWriter(archivo,true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    PrintWriter escribir = new PrintWriter (bw);
+                    for(int i=0;i<clave.size();i++){
+                         escribir.println(clave.get(i));
+                    }
+                    escribir.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+    }
+    public static void crearArchivo(ArrayList<Integer> cantidad,ArrayList<String> clave,ArrayList<String> descripcion,ArrayList<Float> precio){    //Metodo que crea el archivo
         File archivo = new File("inventario.txt");
         if (!archivo.exists())
         {   try {  
@@ -139,14 +175,37 @@ public class FPRRiveraG1Final {
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter escribir = new PrintWriter (bw);
             for(int i=0;i<cantidad.size();i++){
-                 escribir.print(cantidad.get(i)+"\t| "+clave.get(i)+"\t| "+descripcion.get(i)+"\t| "+precio.get(i));
-                if(i<cantidad.size()-1)escribir.print("\t| ");//si es el primero en la linea de lista agrega una separacion en el texto
-                escribir.println();
+                 escribir.println(cantidad.get(i)+"\t| "+clave.get(i)+"\t| "+descripcion.get(i)+"\t| "+precio.get(i));
             }
             escribir.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public static ArrayList<String> leerClaves(ArrayList<String> clave){
+        File archivo = new File ("claves.txt");
+        String cadena="";
+        while(true){
+            try {
+               FileReader lectura = new FileReader(archivo);
+               BufferedReader bufferL = new BufferedReader(lectura);
+               while (cadena!=null){ 
+                   cadena = bufferL.readLine();
+                   if(cadena!=null) { 
+                       clave.add(cadena);
+                   }
+               }
+               bufferL.close();
+               lectura.close();
+               break;
+            } catch (Exception e) {
+                 try{
+                     archivo.createNewFile();
+                 } catch (Exception d) {
+                     System.out.println(d);}
+            }  
+        }
+        return clave;
     }
     public static void mensajeSalida(){     //Metodo que muestra un mensaje de salida en caso de que el usuario
         JOptionPane.showMessageDialog(null,"Gracias por usar el programa"); //ejecute alguna acción que de por terminado el programa
