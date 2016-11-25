@@ -5,6 +5,8 @@
  */
 package fp.rriverag1.pkgfinal;
 import java.io.*;
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 import javax.swing.*;
 
@@ -35,7 +37,7 @@ public class FPRRiveraG1Final {
                 llenarInventario();
                 break;
             case 1:
-                System.out.println("2");
+                venta();
                 break;
             case 2:
                 System.out.println("3");
@@ -47,6 +49,7 @@ public class FPRRiveraG1Final {
                 System.out.println("ka!?");
                 break;
         }
+        cont();
     }
     public static void llenarInventario(){
          ArrayList<Integer> cant = new ArrayList<>();
@@ -80,18 +83,10 @@ public class FPRRiveraG1Final {
                 try {    
                     s = JOptionPane.showInputDialog("Ingrese la clave del articulo.");
                     //s = teclado.nextLine();
-                    for(int i=0;i<clave.size();i++){
-                        while(clave.get(i).contains(s)){
+                        while(claveExiste(clave,s)){
                             JOptionPane.showMessageDialog(panel, "Ya a usado esta clave de articulo.", "Error", JOptionPane.ERROR_MESSAGE);
                             s = JOptionPane.showInputDialog("Ingrese la clave del articulo.");
                         }
-                    }
-                    for(int i=0;i<clavant.size();i++){
-                        while(clavant.get(i).contains(s)){
-                            JOptionPane.showMessageDialog(panel, "Ya a usado esta clave de articulo.", "Error", JOptionPane.ERROR_MESSAGE);
-                            s = JOptionPane.showInputDialog("Ingrese la clave del articulo.");
-                        }
-                    }
                     clave.add(s);
                     break;
                 } catch (Exception e) {
@@ -164,7 +159,7 @@ public class FPRRiveraG1Final {
         {   try {  
             archivo.createNewFile();
             PrintWriter escribir = new PrintWriter (archivo,"utf-8");
-            escribir.println("Cant.\t| Clave\t|Desc.\t|Precio ");
+            escribir.println("Cant.\t|Clave\t|Desc.\t|Precio ");
             escribir.close();
             } catch (IOException ex) {
                ex.printStackTrace();
@@ -175,7 +170,7 @@ public class FPRRiveraG1Final {
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter escribir = new PrintWriter (bw);
             for(int i=0;i<cantidad.size();i++){
-                 escribir.println(cantidad.get(i)+"\t| "+clave.get(i)+"\t| "+descripcion.get(i)+"\t| "+precio.get(i));
+                 escribir.println(cantidad.get(i)+"\t|"+clave.get(i)+"\t|"+descripcion.get(i)+"\t|"+precio.get(i));
             }
             escribir.close();
         } catch (Exception e) {
@@ -206,29 +201,138 @@ public class FPRRiveraG1Final {
             }  
         }
         return clave;
+    }    
+    public static void venta(){
+        File archivo = new File ("inventario.txt");
+        String cadena="";
+        String[] splitted;
+        String[] objeto = new String[4];
+        String clave=pedirClave();
+        while(true){
+            if(clave.toLowerCase().equals("t")){
+                break;
+            }
+            if(clave.toLowerCase().equals("q")){
+                break;
+            }
+            try {
+               FileReader lectura = new FileReader(archivo);
+               BufferedReader bufferL = new BufferedReader(lectura);
+               while (cadena!=null){ 
+                   cadena = bufferL.readLine();
+                   if(cadena!=null) { 
+                       splitted = cadena.split("\\\t\\|");
+                        if(splitted[1].toLowerCase().equals(clave)){
+                            for(int i=0;i<splitted.length;i++){
+                            objeto[i]=splitted[i];
+                            }
+                        cadena=null;
+                        }
+                   }
+               }
+               bufferL.close();
+               lectura.close();
+               for(int i=0;i<objeto.length;i++){
+                    System.out.print(objeto[i]);
+                    if(i<objeto.length-1)System.out.print("|");
+                    if(i==objeto.length-1){System.out.println("");}
+               }
+                break;
+            }   catch (Exception e) {
+                try{
+                    archivo.createNewFile();
+                } catch (Exception d) {
+                    System.out.println(d);}
+            }
+        }
+    }    
+    public static void llenarNota(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        File archivo = new File("nota"+dtf.format(LocalDateTime.now())+".txt");
+        try{
+            PrintWriter escribir = new PrintWriter (archivo,"utf-8");
+        }
+        catch(Exception e){
+            System.out.println("lol?");
+        }
+//        for(int i=0;i<arr.length;i++){
+//            for(int j=0;j<arr[0].length;j++){
+//            escribir.print(arr[i][j]);
+//            if(j==0)escribir.print("\t| ");//si es el primero en la linea de lista agrega una separacion en el texto
+//            }
+//            escribir.println();
+//        }
+    }
+    public static boolean claveExiste(String s){
+        boolean b=false;
+        int j=0;
+        ArrayList<String> clavant = new ArrayList<>();
+        clavant = leerClaves(clavant);
+        if(clavant.get(j).contains(s)){
+            b=true;}
+        while(!clavant.get(j).contains(s)&j<clavant.size()){
+            ++j;
+            if(clavant.get(j).contains(s)){
+                b=true;}
+        }
+        return b;
+    }
+    public static boolean claveExiste(ArrayList<String> clave,String s){
+        boolean b=false;
+        int i=0,j=0;
+        ArrayList<String> clavant = new ArrayList<>();
+        clavant = leerClaves(clavant);
+        if(!clave.get(i).contains(s)&i<clave.size()){
+            while(!clave.get(i).contains(s)){++i;}
+        } else {b=true;}
+        if(!clavant.get(j).contains(s)&j<clavant.size()){
+            while(!clavant.get(j).contains(s)){++j;}
+        } else {b=true;}
+        return b;
+    }
+    public static String pedirClave(){//Pide al usuario el nombre del archivo, recibe un String y regresa un String
+        String c = null;
+        final JPanel panel = new JPanel();
+        while(true){
+                try {
+                    c = JOptionPane.showInputDialog("Ingrese la clave del articulo y cantidad del articulo en el siguiente formato.(4*clave)");
+                    if(c.toLowerCase().equals("q")){
+                        break;
+                    }
+                    if(c.contains("*")){
+                        try{
+                            String[] d=c.split("\\*");
+                                while(!claveExiste(d[1])){
+                                    c = JOptionPane.showInputDialog("El articulo que ingreso no existe");
+                                }
+                        } catch(Exception e){}
+                        break;
+                    }
+                    if(!c.contains("*")){
+                    while(!claveExiste(c)){
+                            c = JOptionPane.showInputDialog("El articulo que ingreso no existe");
+                        }
+                    break;
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(panel, "Debe introducir un dato, si desea parar introduzca Q", "Error", JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
+                }
+        }
+        return c;
     }
     public static void mensajeSalida(){     //Metodo que muestra un mensaje de salida en caso de que el usuario
         JOptionPane.showMessageDialog(null,"Gracias por usar el programa"); //ejecute alguna acción que de por terminado el programa
         System.exit(0);
     }
     public static void cont(){      //Metodo que da una salida al programa, si el usuario lo quiere, despues de ejecutar 1 o 2 en el menu principal.
-        int resp;
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Desea continuar?");
-        System.out.println("1. Si");
-        System.out.println("0. No");        
-        resp = entrada.nextInt();
-        while (resp<0 || resp>1){
-            System.err.print("Valor Incorrecto, Intente de nuevo: ");
-            resp = entrada.nextInt();
-        }
-            switch(resp){
-                case 0:
-                    main(null);
-                    break;
-                default:
-                    mensajeSalida();
-                    break;
-            }
-        }
+        List<String> optionList = new ArrayList<>();
+        optionList.add("Si");
+        optionList.add("No");
+        Object[] options = optionList.toArray();
+        int value = JOptionPane.showOptionDialog(null,"Desea continuar con el programa?","Menu",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,optionList.get(0));
+        if(value==1){
+            mensajeSalida();
+        } else {menu();}
+    }
 }
