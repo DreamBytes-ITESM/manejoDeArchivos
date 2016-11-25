@@ -61,63 +61,56 @@ public class FPRRiveraG1Final {
          //Scanner teclado = new Scanner(System.in);
          boolean a=true;
          int c;
-         String s;
+         String s="",d="";
          float f;
          final JPanel panel = new JPanel();
          while(a){
             while(true){
-                //System.out.println("Ingrese la cantidad del articulo.");
                 try {
                     c = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad del articulo."));
-                    //c = teclado.nextInt();
                     cant.add(c);
                     break;
                 } catch (Exception e) {
-                    //System.err.println("Debe de ingresar un numero entero.");
-                    //teclado.next();
                     JOptionPane.showMessageDialog(panel, "Debe de ingresar un numero entero.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
             while(true){
-                //System.out.println("Ingrese la clave del articulo.");
                 try {    
+                    while(s.equals("")){
                     s = JOptionPane.showInputDialog("Ingrese la clave del articulo.");
-                    //s = teclado.nextLine();
+                    if(s.equals("")){JOptionPane.showMessageDialog(panel, "Debes ingresar una clave.", "Error", JOptionPane.ERROR_MESSAGE);}
+                    }
                         while(claveExiste(clave,s)){
                             JOptionPane.showMessageDialog(panel, "Ya a usado esta clave de articulo.", "Error", JOptionPane.ERROR_MESSAGE);
                             s = JOptionPane.showInputDialog("Ingrese la clave del articulo.");
                         }
                     clave.add(s);
+                    s="";
                     break;
                 } catch (Exception e) {
-                    //System.err.println("Muestre este error al programador.");
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(panel, "Muestre este error al programador.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }  
             while(true){
-                //System.out.println("Ingrese la descripción del articulo.");
                 try {    
-                    s = JOptionPane.showInputDialog("Ingrese la descripción del articulo.");
-                    //s = teclado.nextLine();
-                    desc.add(s);
+                    while(d.equals("")){
+                    d = JOptionPane.showInputDialog("Ingrese la descripción del articulo.");
+                    if(d.equals("")){JOptionPane.showMessageDialog(panel, "Debes ingresar una descripción.", "Error", JOptionPane.ERROR_MESSAGE);}
+                    }
+                    desc.add(d);
+                    d="";
                     break;
                 } catch (Exception e) {
-                    //System.err.println("Muestre este error al programador.");
-                    //teclado.next();
                     JOptionPane.showMessageDialog(panel, "Muestre este error al programador.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
             while(true){
                 try {
-                    //System.out.println("Ingrese la precio del articulo.");
-                    //f = teclado.nextFloat();
                     f = Float.parseFloat(JOptionPane.showInputDialog("Ingrese el precio del articulo."));
                     precio.add(f);
                     break;
                 } catch (Exception e) {
-                    //System.err.println("Ingrese el precio del articulo con 2 decimales Ej: XX.XX.");
-                    //teclado.next();
                     JOptionPane.showMessageDialog(panel, "Ingrese el precio del articulo con 2 decimales Ej: XX.XX.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -126,7 +119,7 @@ public class FPRRiveraG1Final {
             optionList.add("No");
 
             Object[] options = optionList.toArray();
-            int value = JOptionPane.showOptionDialog(null,"Desea continuar con el programa?","Menu",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,optionList.get(0));
+            int value = JOptionPane.showOptionDialog(null,"Desea agregar mas articulos?","Menu",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,optionList.get(0));
             if(value==1)a=false;
             }
          crearArchivo(cant, clave, desc, precio);
