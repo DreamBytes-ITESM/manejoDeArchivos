@@ -199,15 +199,17 @@ public class FPRRiveraG1Final {
         File archivo = new File ("inventario.txt");
         boolean a=true;
         int n=0;
-        String cadena="";
+        String cadena;
         String[] splitted;
         String[] objeto = new String[4];
         String[][] nota = new String[20][5];
         String clave;
         String[] splitClave;
         while(a){
+            cadena="";
             clave=pedirClave();
             if(clave.toLowerCase().equals("q")){
+                llenarNota(nota);
                 break;
             }
             try {
@@ -250,14 +252,7 @@ public class FPRRiveraG1Final {
                n++;
             }   catch (Exception e) {
             e.printStackTrace();}
-            List<String> optionList = new ArrayList<>();
-            optionList.add("Si");
-            optionList.add("No");
-            Object[] options = optionList.toArray();
-            int value = JOptionPane.showOptionDialog(null,"Desea agregar mas articulos?","Menu",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,optionList.get(0));
-            if(value==1)a=false;
         }
-        llenarNota(nota);
     }    
     public static void llenarNota(String[][] datos){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM hh-mm");
@@ -348,7 +343,7 @@ public class FPRRiveraG1Final {
         final JPanel panel = new JPanel();
         while(true){
                 try {
-                    c = JOptionPane.showInputDialog("Ingrese la clave del articulo y cantidad del articulo en el siguiente formato.(4*clave)");
+                    c = JOptionPane.showInputDialog("Ingrese la clave del articulo y cantidad del articulo en el siguiente formato.(4*clave) para parar ingrese q.");
                     if(c.toLowerCase().equals("q")){
                         break;
                     }
