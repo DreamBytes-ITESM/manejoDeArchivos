@@ -197,32 +197,44 @@ public class FPRRiveraG1Final {
     }    
     public static void venta(){
         File archivo = new File ("inventario.txt");
+        boolean a=true;
         int n=0;
         String cadena="";
         String[] splitted;
         String[] objeto = new String[4];
         String[][] nota = new String[20][5];
-        String clave=pedirClave();
+        String clave;
         String[] splitClave;
-        while(true){
+        while(a){
+            clave=pedirClave();
             if(clave.toLowerCase().equals("q")){
                 break;
             }
             try {
                FileReader lectura = new FileReader(archivo);
                BufferedReader bufferL = new BufferedReader(lectura);
-               while (cadena!=null){ 
-                   cadena = bufferL.readLine();
-                   if(cadena!=null) { 
-                       splitted = cadena.split("\\\t\\|");
-                        if(splitted[1].toLowerCase().equals(clave)){
-                            for(int i=0;i<splitted.length;i++){
-                            objeto[i]=splitted[i];
+                while (cadena!=null){ 
+                    cadena = bufferL.readLine();
+                        if(cadena!=null) { 
+                            splitted = cadena.split("\\\t\\|");
+                            if(clave.contains("*")){
+                                splitClave = clave.split("\\*");
+                                    if(splitted[1].toLowerCase().equals(splitClave[1])){
+                                        for(int i=0;i<splitted.length;i++){
+                                            objeto[i]=splitted[i];
+                                        }
+                                        cadena=null;
+                                    }
+                            }else{
+                                if(splitted[1].toLowerCase().equals(clave)){
+                                    for(int i=0;i<splitted.length;i++){
+                                        objeto[i]=splitted[i];
+                                    }
+                                    cadena=null;
+                                }
                             }
-                        cadena=null;
                         }
-                   }
-               }
+                }
                bufferL.close();
                lectura.close();
                if(clave.contains("*")){
@@ -234,32 +246,48 @@ public class FPRRiveraG1Final {
                nota[n][1]=objeto[1];
                nota[n][2]=objeto[2];
                nota[n][3]=objeto[3];
-               nota[n][4]=String.valueOf(Integer.parseInt(nota[n][0])-Integer.parseInt(nota[n][3]));
+               nota[n][4]=Float.toString((Float.parseFloat(nota[n][0]))*(Float.parseFloat(nota[n][3])));
                n++;
-                llenarNota(nota);
             }   catch (Exception e) {
-                try{
-                    archivo.createNewFile();
-                } catch (Exception d) {
-                    System.out.println(d);}
-            }
+            e.printStackTrace();}
+            List<String> optionList = new ArrayList<>();
+            optionList.add("Si");
+            optionList.add("No");
+            Object[] options = optionList.toArray();
+            int value = JOptionPane.showOptionDialog(null,"Desea agregar mas articulos?","Menu",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,optionList.get(0));
+            if(value==1)a=false;
         }
+        llenarNota(nota);
     }    
     public static void llenarNota(String[][] datos){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM hh-mm");
         File archivo = new File("nota"+dtf.format(LocalDateTime.now())+".txt");
+        if (!archivo.exists())
+            {try {  
+                archivo.createNewFile();
+            } catch (IOException ex) {
+               ex.printStackTrace();
+            }
+        }
         try{
             PrintWriter escribir = new PrintWriter (archivo,"utf-8");
+            escribir.println("Cant.\tClave\tDesc.\tPrecio\tImporte");
+            for(int i=0;i<datos.length;i++){
+                for(int j=0;j<datos[0].length;j++){
+                    if(datos[i][j]!=(null)){
+                        escribir.print(datos[i][j]);}
+                    else {break;}
+                        if(j<datos.length-1){
+                            escribir.print("\t");
+                        }
+                }
+            escribir.println();
+            }
+            escribir.close();
         }
         catch(Exception e){
             System.out.println("lol?");
-        }
-        for(int i=0;i<datos.length;i++){
-            for(int j=0;j<datos[0].length;j++){
-            escribir.print([i][j]);
-            if(j==0)escribir.print("\t| ");//si es el primero en la linea de lista agrega una separacion en el texto
-            }
-            escribir.println();
+            e.printStackTrace();
         }
     }
     public static boolean claveExiste(String s){
