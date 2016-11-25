@@ -91,7 +91,7 @@ public class FPRRiveraG1Final {
                     break;
                 } catch (Exception e) {
                     //System.err.println("Muestre este error al programador.");
-                    //teclado.next();
+                    e.printStackTrace();
                     JOptionPane.showMessageDialog(panel, "Muestre este error al programador.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }  
@@ -204,14 +204,14 @@ public class FPRRiveraG1Final {
     }    
     public static void venta(){
         File archivo = new File ("inventario.txt");
+        int n=0;
         String cadena="";
         String[] splitted;
         String[] objeto = new String[4];
+        String[][] nota = new String[20][5];
         String clave=pedirClave();
+        String[] splitClave;
         while(true){
-            if(clave.toLowerCase().equals("t")){
-                break;
-            }
             if(clave.toLowerCase().equals("q")){
                 break;
             }
@@ -232,12 +232,18 @@ public class FPRRiveraG1Final {
                }
                bufferL.close();
                lectura.close();
-               for(int i=0;i<objeto.length;i++){
-                    System.out.print(objeto[i]);
-                    if(i<objeto.length-1)System.out.print("|");
-                    if(i==objeto.length-1){System.out.println("");}
+               if(clave.contains("*")){
+                    splitClave = clave.split("\\*");
+                    nota[n][0]=splitClave[0];
+               } else {
+                   nota[n][0]="1";
                }
-                break;
+               nota[n][1]=objeto[1];
+               nota[n][2]=objeto[2];
+               nota[n][3]=objeto[3];
+               nota[n][4]=String.valueOf(Integer.parseInt(nota[n][0])-Integer.parseInt(nota[n][3]));
+               n++;
+                llenarNota(nota);
             }   catch (Exception e) {
                 try{
                     archivo.createNewFile();
@@ -246,8 +252,8 @@ public class FPRRiveraG1Final {
             }
         }
     }    
-    public static void llenarNota(){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    public static void llenarNota(String[][] datos){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM");
         File archivo = new File("nota"+dtf.format(LocalDateTime.now())+".txt");
         try{
             PrintWriter escribir = new PrintWriter (archivo,"utf-8");
@@ -255,13 +261,13 @@ public class FPRRiveraG1Final {
         catch(Exception e){
             System.out.println("lol?");
         }
-//        for(int i=0;i<arr.length;i++){
-//            for(int j=0;j<arr[0].length;j++){
-//            escribir.print(arr[i][j]);
-//            if(j==0)escribir.print("\t| ");//si es el primero en la linea de lista agrega una separacion en el texto
-//            }
-//            escribir.println();
-//        }
+        for(int i=0;i<datos.length;i++){
+            for(int j=0;j<datos[0].length;j++){
+            escribir.print([i][j]);
+            if(j==0)escribir.print("\t| ");//si es el primero en la linea de lista agrega una separacion en el texto
+            }
+            escribir.println();
+        }
     }
     public static boolean claveExiste(String s){
         boolean b=false;
@@ -282,12 +288,38 @@ public class FPRRiveraG1Final {
         int i=0,j=0;
         ArrayList<String> clavant = new ArrayList<>();
         clavant = leerClaves(clavant);
-        if(!clave.get(i).contains(s)&i<clave.size()){
-            while(!clave.get(i).contains(s)){++i;}
-        } else {b=true;}
-        if(!clavant.get(j).contains(s)&j<clavant.size()){
-            while(!clavant.get(j).contains(s)){++j;}
-        } else {b=true;}
+        if(!clave.isEmpty()){
+            if(clave.get(i).contains(s)){
+                b=true;
+                return b;}
+            while(i<clave.size()){
+                if(!clave.get(i).contains(s)){
+                    ++i;
+                    if(i<clave.size()){
+                        if(clave.get(i).contains(s)){
+                            b=true;
+                            return b;}
+                        return b;}
+                } else {b=true;
+                            return b;}
+            }
+        }
+        if(!clavant.isEmpty()){
+            if(clavant.get(j).contains(s)){
+                b=true;
+                return b;}
+                while(j<clavant.size()){
+                    if(!clavant.get(j).contains(s)){
+                        ++j;
+                        if(i<clavant.size()){
+                            if(clavant.get(j).contains(s)){
+                               b=true;
+                               return b;}
+                        return b;}
+                } else {b=true;
+                            return b;}
+            }
+        }
         return b;
     }
     public static String pedirClave(){//Pide al usuario el nombre del archivo, recibe un String y regresa un String
